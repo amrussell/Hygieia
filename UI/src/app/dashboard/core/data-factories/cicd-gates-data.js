@@ -125,7 +125,7 @@
     var defer = $q.defer();
     var factory = null;
     if (data.source.api != "NA") {
-      factory = injector.get(data.source.api); //synamically get the factory from injector
+      factory = injector.get(data.source.api); //dynamically get the factory from injector
     }
     if (!factory) {
       if (data.source.api == "NA") {
