@@ -1,5 +1,931 @@
 {
-	"profile": ["test",
+	"profile": [
+		"test"
+		"rules":"
+		[
+			{
+				"source": {
+					"api": "dashboardData",
+					"method": "detail",
+					"args": [
+						{
+							"name": "$dashboardid"
+						}
+					],
+					"result": {
+						"location": "application.components.0.collectorItems.SCM.0"
+					}
+				},
+				"rules": {
+					"==": [
+						{
+							"var": "enabled"
+						},
+						true
+					]
+				}
+			},
+			{
+				"exhibitAs": "Branching Strategy",
+				"source": {
+					"api": "branchesData",
+					"method": "details",
+					"args": [
+						{
+							"name": "$collectoritemid"
+						}
+					],
+					"result": {
+						"location": "options.branches.length"
+					}
+				},
+				"rules": {
+					"<": [
+						{
+							"var": "compare"
+						},
+						4
+					]
+				}
+			},
+			{
+				"exhibitAs": "Code Coverage",
+				"source": {
+					"api": "codeAnalysisData",
+					"method": "staticDetails",
+					"args": [
+						{
+							"name": "params",
+							"value": {
+								"max": 1,
+								"componentId": "$componentid"
+							}
+						}
+					],
+					"result": {
+						"location": "result.0.metrics",
+						"rule": [
+							{
+								"==": [
+									{
+										"var": "name"
+									},
+									"line_coverage"
+								]
+							}
+						]
+					}
+				},
+				"rules": {
+					">": [
+						{
+							"var": "value"
+						},
+						80
+					]
+				}
+			},
+			{
+				"exhibitAs": "Automated Build",
+				"source": {
+					"api": "buildData",
+					"method": "details",
+					"args": [
+						{
+							"name": "params",
+							"value": {
+								"componentId": "$componentid"
+							}
+						}
+					],
+					"result": {
+						"location": "result",
+						"rule": [
+							"$length-1"
+						]
+					}
+				},
+				"rules": [
+					{
+						"==": [
+							{
+								"var": "buildStatus"
+							},
+							"Success"
+						]
+					}
+				]
+			},
+			{
+				"exhibitAs": "Static Analysis",
+				"source": {
+					"api": "codeAnalysisData",
+					"method": "staticDetails",
+					"args": [
+						{
+							"name": "params",
+							"value": {
+								"max": 1,
+								"componentId": "$componentid"
+							}
+						}
+					],
+					"result": {
+						"location": "result.0.metrics",
+						"rule": [
+							{
+								"==": [
+									{
+										"var": "name"
+									},
+									"major_violations"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "name"
+									},
+									"critical_violations"
+								]
+							}
+						],
+						"find": "formattedValue"
+					}
+				},
+				"rules": {
+					"and": [
+						{
+							"<=": [
+								{
+									"var": "major_violations"
+								},
+								50
+							]
+						},
+						{
+							"<": [
+								{
+									"var": "critical_violations"
+								},
+								1
+							]
+						}
+					]
+				}
+			},
+			{
+				"exhibitAs": "Security Scan",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Open Source Scan",
+				"source": [
+					{
+						"exhibitAs": "Version Control",
+						"source": {
+							"api": "dashboardData",
+							"method": "detail",
+							"args": [
+								{
+									"name": "$dashboardid"
+								}
+							],
+							"result": {
+								"location": "application.components.0.collectorItems.SCM.0"
+							}
+						},
+						"rules": {
+							"==": [
+								{
+									"var": "enabled"
+								},
+								true
+							]
+						}
+					},
+					{
+						"exhibitAs": "Branching Strategy",
+						"source": {
+							"api": "branchesData",
+							"method": "details",
+							"args": [
+								{
+									"name": "$collectoritemid"
+								}
+							],
+							"result": {
+								"location": "options.branches.length"
+							}
+						},
+						"rules": {
+							"<": [
+								{
+									"var": "compare"
+								},
+								4
+							]
+						}
+					},
+					{
+						"exhibitAs": "Code Coverage",
+						"source": {
+							"api": "codeAnalysisData",
+							"method": "staticDetails",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"max": 1,
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result.0.metrics",
+								"rule": [
+									{
+										"==": [
+											{
+												"var": "name"
+											},
+											"line_coverage"
+										]
+									}
+								]
+							}
+						},
+						"rules": {
+							">": [
+								{
+									"var": "value"
+								},
+								80
+							]
+						}
+					},
+					{
+						"exhibitAs": "Automated Build",
+						"source": {
+							"api": "buildData",
+							"method": "details",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result",
+								"rule": [
+									"$length-1"
+								]
+							}
+						},
+						"rules": [
+							{
+								"==": [
+									{
+										"var": "buildStatus"
+									},
+									"Success"
+								]
+							}
+						]
+					},
+					{
+						"exhibitAs": "Static Analysis",
+						"source": {
+							"api": "codeAnalysisData",
+							"method": "staticDetails",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"max": 1,
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result.0.metrics",
+								"rule": [
+									{
+										"==": [
+											{
+												"var": "name"
+											},
+											"major_violations"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "name"
+											},
+											"critical_violations"
+										]
+									}
+								],
+								"find": "formattedValue"
+							}
+						},
+						"rules": {
+							"and": [
+								{
+									"<=": [
+										{
+											"var": "major_violations"
+										},
+										50
+									]
+								},
+								{
+									"<": [
+										{
+											"var": "critical_violations"
+										},
+										1
+									]
+								}
+							]
+						}
+					},
+					{
+						"exhibitAs": "Security Scan",
+						"source": {
+							"api": "codeAnalysisData",
+							"method": "securityDetails",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"max": 1,
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result.0.metrics"
+							},
+							"rules": {
+								"or": [
+									{
+										">=": [
+											{
+												"var": "critical"
+											},
+											0
+										]
+									},
+									{
+										">="[{"var":"blocker"
+									},
+									0
+								]
+							},{
+							">="[{"var":"major"
+						}
+					}
+				]
+			}}},{"exhibitAs":
+			"Open Source Scan",
+			"libraryPolicy",
+			"libraryPolicyDetails",
+			[
+				{
+					"name": "params",
+					"value": {
+						"componentId": "$componentid"
+					}
+				}
+			],"result":
+			{
+				"location": "result.0"
+			},"rules":
+			{
+				">=": [
+					{
+						"var": "timestamp"
+					},
+					0
+				]
+			}}},{"exhibitAs":
+			"Auto Provision",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Immutable Servers",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Artifact Management",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Automated Integration",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Automated Performannce",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Automated Rolhback",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Auto Gen of COs",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Zero Down time Prod Release",
+			{
+				"api": "NA"
+			}},{"exhibitAs":
+			"Feature Toggle",
+			{
+				"api": "NA"
+			}}
+			[
+				"test"
+			
+		
+	[
+		"test""rules" : "[
+			{
+				"source": {
+					"api": "dashboardData",
+					"method": "detail",
+					"args": [
+						{
+							"name": "$dashboardid"
+						}
+					],
+					"result": {
+						"location": "application.components.0.collectorItems.SCM.0"
+					}
+				},
+				"rules": {
+					"==": [
+						{
+							"var": "enabled"
+						},
+						true
+					]
+				}
+			},
+			{
+				"exhibitAs": "Branching Strategy",
+				"source": {
+					"api": "branchesData",
+					"method": "details",
+					"args": [
+						{
+							"name": "$collectoritemid"
+						}
+					],
+					"result": {
+						"location": "options.branches.length"
+					}
+				},
+				"rules": {
+					"<": [
+						{
+							"var": "compare"
+						},
+						4
+					]
+				}
+			},
+			{
+				"exhibitAs": "Code Coverage",
+				"source": {
+					"api": "codeAnalysisData",
+					"method": "staticDetails",
+					"args": [
+						{
+							"name": "params",
+							"value": {
+								"max": 1,
+								"componentId": "$componentid"
+							}
+						}
+					],
+					"result": {
+						"location": "result.0.metrics",
+						"rule": [
+							{
+								"==": [
+									{
+										"var": "name"
+									},
+									"line_coverage"
+								]
+							}
+						]
+					}
+				},
+				"rules": {
+					">": [
+						{
+							"var": "value"
+						},
+						80
+					]
+				}
+			},
+			{
+				"exhibitAs": "Automated Build",
+				"source": {
+					"api": "buildData",
+					"method": "details",
+					"args": [
+						{
+							"name": "params",
+							"value": {
+								"componentId": "$componentid"
+							}
+						}
+					],
+					"result": {
+						"location": "result",
+						"rule": [
+							"$length-1"
+						]
+					}
+				},
+				"rules": [
+					{
+						"==": [
+							{
+								"var": "buildStatus"
+							},
+							"Success"
+						]
+					}
+				]
+			},
+			{
+				"exhibitAs": "Static Analysis",
+				"source": {
+					"api": "codeAnalysisData",
+					"method": "staticDetails",
+					"args": [
+						{
+							"name": "params",
+							"value": {
+								"max": 1,
+								"componentId": "$componentid"
+							}
+						}
+					],
+					"result": {
+						"location": "result.0.metrics",
+						"rule": [
+							{
+								"==": [
+									{
+										"var": "name"
+									},
+									"major_violations"
+								]
+							},
+							{
+								"==": [
+									{
+										"var": "name"
+									},
+									"critical_violations"
+								]
+							}
+						],
+						"find": "formattedValue"
+					}
+				},
+				"rules": {
+					"and": [
+						{
+							"<=": [
+								{
+									"var": "major_violations"
+								},
+								50
+							]
+						},
+						{
+							"<": [
+								{
+									"var": "critical_violations"
+								},
+								1
+							]
+						}
+					]
+				}
+			},
+			{
+				"exhibitAs": "Security Scan",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Open Source Scan",
+				"source": [
+					{
+						"exhibitAs": "Version Control",
+						"source": {
+							"api": "dashboardData",
+							"method": "detail",
+							"args": [
+								{
+									"name": "$dashboardid"
+								}
+							],
+							"result": {
+								"location": "application.components.0.collectorItems.SCM.0"
+							}
+						},
+						"rules": {
+							"==": [
+								{
+									"var": "enabled"
+								},
+								true
+							]
+						}
+					},
+					{
+						"exhibitAs": "Branching Strategy",
+						"source": {
+							"api": "branchesData",
+							"method": "details",
+							"args": [
+								{
+									"name": "$collectoritemid"
+								}
+							],
+							"result": {
+								"location": "options.branches.length"
+							}
+						},
+						"rules": {
+							"<": [
+								{
+									"var": "compare"
+								},
+								4
+							]
+						}
+					},
+					{
+						"exhibitAs": "Code Coverage",
+						"source": {
+							"api": "codeAnalysisData",
+							"method": "staticDetails",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"max": 1,
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result.0.metrics",
+								"rule": [
+									{
+										"==": [
+											{
+												"var": "name"
+											},
+											"line_coverage"
+										]
+									}
+								]
+							}
+						},
+						"rules": {
+							">": [
+								{
+									"var": "value"
+								},
+								80
+							]
+						}
+					},
+					{
+						"exhibitAs": "Automated Build",
+						"source": {
+							"api": "buildData",
+							"method": "details",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result",
+								"rule": [
+									"$length-1"
+								]
+							}
+						},
+						"rules": [
+							{
+								"==": [
+									{
+										"var": "buildStatus"
+									},
+									"Success"
+								]
+							}
+						]
+					},
+					{
+						"exhibitAs": "Static Analysis",
+						"source": {
+							"api": "codeAnalysisData",
+							"method": "staticDetails",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"max": 1,
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result.0.metrics",
+								"rule": [
+									{
+										"==": [
+											{
+												"var": "name"
+											},
+											"major_violations"
+										]
+									},
+									{
+										"==": [
+											{
+												"var": "name"
+											},
+											"critical_violations"
+										]
+									}
+								],
+								"find": "formattedValue"
+							}
+						},
+						"rules": {
+							"and": [
+								{
+									"<=": [
+										{
+											"var": "major_violations"
+										},
+										50
+									]
+								},
+								{
+									"<": [
+										{
+											"var": "critical_violations"
+										},
+										1
+									]
+								}
+							]
+						}
+					},
+					{
+						"exhibitAs": "Security Scan",
+						"source": {
+							"api": "codeAnalysisData",
+							"method": "securityDetails",
+							"args": [
+								{
+									"name": "params",
+									"value": {
+										"max": 1,
+										"componentId": "$componentid"
+									}
+								}
+							],
+							"result": {
+								"location": "result.0.metrics"
+							},
+							"rules": {
+								"or": [
+									{
+										">=": [
+											{
+												"var": "critical"
+											},
+											0
+										]
+									},
+									{
+										">="[{"var":"blocker"
+									},
+									0
+								]
+							},{
+							">="[{"var":"major"
+						}
+					}
+				]
+			}}},{"exhibitAs":
+			"Open Source Scan",
+			{
+				"api": "libraryPolicy",
+				"method": "libraryPolicyDetails",
+				"args": [
+					{
+						"name": "params",
+						"value": {
+							"componentId": "$componentid"
+						}
+					}
+				],
+				"result": {
+					"location": "result.0"
+				},
+				"rules": {
+					">=": [
+						{
+							"var": "timestamp"
+						},
+						0
+					]
+				}
+			}},
+			{
+				"exhibitAs": "Auto Provision",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Immutable Servers",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Artifact Management",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Automated Integration",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Automated Performannce",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Automated Rolhback",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Auto Gen of COs",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Zero Down time Prod Release",
+				"source": {
+					"api": "NA"
+				}
+			},
+			{
+				"exhibitAs": "Feature Toggle",
+				"source": {
+					"api": "NA"
+				}
+			}
+		["test",
 	"rules": "[{
 			"source": {
 				"api": "dashboardData",
@@ -314,7 +1240,38 @@
     {
       "exhibitAs": "Security Scan",
       "source": {
-        "api": "NA"
+        "api": "codeAnalysisData",
+        "method": "securityDetails",
+        "args": [{
+          "name": "params",
+          "value": {
+            "max": 1,
+            "componentId": "$componentid"
+          }
+        }],
+        "result": {
+        		"location": "result.0.metrics"
+    		},
+    		"rules": {
+			"or": [{
+				"==": [{
+				"var": "name"
+				}, "critical"]
+			},
+			{
+				"==" [{
+				"var": "name"
+				}, "blocker"]
+				
+			},
+			{
+				"==" [{
+				"var": "name"
+				}, "major"]
+				
+			}
+		  ]
+    		}
       }
     },
     {
